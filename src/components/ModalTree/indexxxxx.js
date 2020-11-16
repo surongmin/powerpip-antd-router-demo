@@ -385,14 +385,17 @@ const departmentDataTable = [
 
 ];
 
-
 const ModalTree = (props) => {
     const [treeData, setTreeData] = useState(projectTreeData)
     const [dataTable, setDataTable] = useState(projectDataTable)
     const [data, setData] = useState([])
     const [hasData, setHasData] = useState(false)
     const [dataSelect, setdataSelect] = useState([])
-
+    // const [dataSelect, setdataSelect] = useState([{
+    //     key: '',
+    //     code: '',
+    //     name: '',
+    // }])
     const [projectButton, setProjectButton] = useState('primary')
     const [departmentButton, setDepartmentButton] = useState('default')
 
@@ -467,6 +470,14 @@ const ModalTree = (props) => {
         setMultipleButton('primary')
     }
 
+    //  右边Select表格的代码
+
+    const handleDeleteSelect = (value) => {
+        console.log(value)
+        setHasData(false)
+
+    }
+
     // 右边Select表格的字段
     const columnsSelect = [
         {
@@ -479,25 +490,12 @@ const ModalTree = (props) => {
             key: 'action',
             render: (record) => (
                 <Space size="middle">
-                    <a onClick={handleDeleteSelect.bind(this, record)}>Delete</a>
+                    <a href='#' onClick={handleDeleteSelect.bind(this, record)}>删除</a>
                 </Space>
             )
         }
     ];
 
-    //  右边Select表格的代码
-
-    const handleDeleteSelect = (value) => {
-        console.log(value)
-        let newValue = [...dataSelect]
-        for (let i = 0; i < newValue.length; i++) {
-            if (newValue[i].key === value.key) {
-                newValue.splice(i, 1)
-            }
-        }
-        setdataSelect(newValue)
-        props.onSelectPeople(newValue)
-    }
 
     return (
         <Row gutter={16}>

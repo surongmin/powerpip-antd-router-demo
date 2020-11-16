@@ -31,9 +31,9 @@ class ModalContent extends Component {
     this.setState({ visible: false });
   };
 
-  handleSelectPeople = (name) => {
+  handleSelectPeople = (dataSelect) => {
     this.setState({
-      formSelectName: name
+      formSelectName: dataSelect
     })
   }
 

@@ -18,7 +18,7 @@ const Frame = (props) => {
         <Layout>
             <Header className="header">
                 <div className="logo" />
-                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
                     <Menu.Item key="1">项目管理</Menu.Item>
                     <Menu.Item key="2">系统管理</Menu.Item>
                     <Menu.Item key="3">后台管理</Menu.Item>

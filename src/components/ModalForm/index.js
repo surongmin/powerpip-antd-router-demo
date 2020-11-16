@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input, InputNumber, Select } from 'antd';
+import { Modal, Form, Input, InputNumber, Tag } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import ModalContent from '../ModalContent'
+import './style.css'
 
-const { Search } = Input;
 
-const children = [];
+// function log(e) {
+//     console.log(e);
+// }
 
 const formItemLayout = {
     labelCol: {
@@ -26,9 +28,9 @@ const CollectionCreateForm = (values) => {
         handleNameInputChange,
         handleAgeInputChange,
         handleClickOpenModal,
-        handleSearchRes
+        handleClose
     } = values
-    const { codeInputValue, nameInputValue, ageInputValue, principalValue, searchRes } = state
+    const { codeInputValue, nameInputValue, ageInputValue, principalValue } = state
 
     const [form] = Form.useForm();
     return (
@@ -72,33 +74,32 @@ const CollectionCreateForm = (values) => {
                 <Form.Item label="年龄" name="age">
                     <InputNumber min={0} max={150} onChange={handleAgeInputChange} />
                 </Form.Item>
+                <Form.Item label="负责人" name="principal" >
+                    <div className='input-select-selector' >
+                        {
+                            principalValue.length ?
+                                (
+                                    principalValue.map((tag, i) => {
+                                        return (
+                                            <Tag closable onClose={() => handleClose(tag)} className="select-tag-item" key={i}>
+                                                {tag}
+                                            </Tag>
+                                        )
+                                    })
+                                )
+                                :
+                                <span className="ant-select-selection-placeholder">请选择人员</span>
+                        }
+                        <div className='icon-openmodal' onClick={handleClickOpenModal} >
+                            <EllipsisOutlined />
+                        </div>
+                    </div>
+                </Form.Item>
                 {/* <Form.Item label="负责人" name="principal" onClick={handleClickOpenModal} >
                     <Input value={principalValue} placeholder={principalValue} suffix={<EllipsisOutlined />} />
                 </Form.Item> */}
-                {/* <Form.Item label="负责人" name="principal" onClick={handleClickOpenModal} >
-                    <Search
-                        placeholder={principalValue}
-                        suffix={<EllipsisOutlined />}
-                        onSearch={handleSearchRes}
-                    />
-                </Form.Item> */}
-                <Form.Item label="负责人" name="principal"  >
-                    {/* <Input value={principalValue} placeholder={principalValue} suffix={<EllipsisOutlined />} /> */}
-                    <Select
-                        mode="multiple"
-                        allowClear
-                        style={{ width: '100%' }}
-                        placeholder="Please select"
-                        defaultValue={['a10', 'c12']}
-                        onClick={handleClickOpenModal}
-                        onChange={handleSearchRes}
-                    // suffix={<EllipsisOutlined />}
-                    >
-                        {searchRes}
-                    </Select>
-                </Form.Item>
             </Form>
-        </Modal>
+        </Modal >
     );
 };
 
@@ -111,10 +112,8 @@ class ModalForm extends Component {
             codeInputValue: props.record.code,
             nameInputValue: props.record.code,
             ageInputValue: props.record.age,
-            principalValue: '张三',
+            principalValue: [],
             childvisible: false,
-            // 负责人
-            searchRes: ['shdieh', 'ansdifoh']
         };
     }
 
@@ -159,8 +158,13 @@ class ModalForm extends Component {
         })
     }
 
-    handleUpdateForm = (principal) => {
-        console.log(principal)
+    handleUpdateForm = (value) => {
+        console.log(value)
+        let principal = []
+        for (let i = 0; i < value.length; i++) {
+            principal.push(value[i].name)
+        }
+
         this.setState({
             childvisible: false,
             principalValue: principal,
@@ -169,18 +173,13 @@ class ModalForm extends Component {
         console.log(this.state.principalValue)
     }
 
-    // componentDidUpdate() {
-    //     this.setState({
-    //         principalValue: this.state.principal,
-    //     })
-    // }
-
-    handleSearchRes = (value, event) => {
-        console.log(value, event)
-    }
+    handleClose = removedTag => {
+        const tags = this.state.principalValue.filter(tag => tag !== removedTag);
+        this.setState({ principalValue: tags });
+    };
 
     render() {
-        const { visible, childvisible } = this.state
+        const { visible, childvisible, principalValue } = this.state
         return (
             <>
                 <CollectionCreateForm
@@ -194,10 +193,11 @@ class ModalForm extends Component {
                     handleNameInputChange={this.handleNameInputChange}
                     handleAgeInputChange={this.handleAgeInputChange}
                     handleClickOpenModal={this.handleClickOpenModal}
-                    handleSearchRes={this.handleSearchRes}
+                    handleClose={this.handleClose}
                 />
                 <ModalContent
                     visible={childvisible}
+                    tag={principalValue}
                     // record={record}
                     onUpdateForm={this.handleUpdateForm}
                 />
