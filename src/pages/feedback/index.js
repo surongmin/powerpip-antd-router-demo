@@ -3,6 +3,7 @@ import { Table } from 'antd';
 import { DndProvider, useDrag, useDrop, createDndContext } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
+import DndModalForm from '../../components/DndModalForm'
 
 const RNDContext = createDndContext(HTML5Backend);
 
@@ -142,6 +143,9 @@ const Feedback = () => {
 
     ]);
 
+    const [visible, setVisible] = useState(false)
+    const [recorddata, setRecorddata] = useState({})
+
     const components = {
         body: {
             row: DragableBodyRow,
@@ -165,6 +169,27 @@ const Feedback = () => {
 
     const manager = useRef(RNDContext);
 
+    // Modal弹框
+    const handleDoubleClickRow = (record, event) => {
+        // object的setState赋值方式
+        setVisible(true)
+        setRecorddata({ ...record })
+        console.log(record)
+        console.log(recorddata)
+    }
+
+    const handleUpdateTable = (values) => {
+        const { code, name, age } = values
+        let newData = data.map(item => {
+            return recorddata.key === item.key ? { ...item, code, name, age } : item
+        });
+        setVisible(false)
+        setData(newData)
+
+        console.log(values)
+        console.log(newData)
+    }
+
     return (
         <DndProvider manager={manager.current.dragDropManager}>
             <Table
@@ -174,7 +199,14 @@ const Feedback = () => {
                 onRow={(record, index) => ({
                     index,
                     moveRow,
-                })}
+                    onDoubleClick: event => { handleDoubleClickRow(record, event) },
+                })
+                }
+            />
+            <DndModalForm
+                visible={visible}
+                record={recorddata}
+                onUpdateTable={handleUpdateTable}
             />
         </DndProvider>
     );

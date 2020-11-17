@@ -1,8 +1,6 @@
 
 // 投资计划分解
 export { default as Decompose } from './decompose';
-// 前期管理
-export { default as EarlierStage } from './earlierStage';
 // 投资计划反馈
 export { default as Feedback } from './feedback';
 // 年度投资计划

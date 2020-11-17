@@ -388,8 +388,6 @@ class TableDemo extends Component {
                     }
                     }
                 />
-                {/* <ModalContent visible={visible} /> */}
-                {/* <ModalDetail visible={visible} record={record} /> */}
                 <ModalForm
                     visible={visible}
                     record={record}

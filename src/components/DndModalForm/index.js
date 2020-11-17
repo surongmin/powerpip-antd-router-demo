@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Form, Input, InputNumber, Tag } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
-import ModalContent from '../ModalContent'
+import DndModalContent from '../DndModalContent'
 import './style.css'
 
 
@@ -31,6 +31,7 @@ const CollectionCreateForm = (values) => {
         handleClose
     } = values
     const { codeInputValue, nameInputValue, ageInputValue, principalValue } = state
+    console.log(codeInputValue, nameInputValue, ageInputValue,)
 
     const [form] = Form.useForm();
     return (
@@ -53,12 +54,10 @@ const CollectionCreateForm = (values) => {
             }}
         >
             <Form
-                form={form}
+                // form={form}
                 name="form_in_modal"
                 {...formItemLayout}
                 initialValues={{
-                    title: "jsaodijwo",
-                    modifier: 'public',
                     code: codeInputValue,
                     name: nameInputValue,
                     age: ageInputValue,
@@ -66,13 +65,14 @@ const CollectionCreateForm = (values) => {
                 }}
             >
                 <Form.Item label="编号" name="code">
-                    <Input onChange={handleCodeInputChange} />
+                    <Input onChange={handleCodeInputChange} value={codeInputValue} />
                 </Form.Item>
                 <Form.Item label="姓名" name="name">
-                    <Input onChange={handleNameInputChange} />
+                    {nameInputValue}
+                    <Input onChange={handleNameInputChange} value={nameInputValue} />
                 </Form.Item>
                 <Form.Item label="年龄" name="age">
-                    <InputNumber min={0} max={150} onChange={handleAgeInputChange} />
+                    <InputNumber min={0} max={150} onChange={handleAgeInputChange} value={ageInputValue} />
                 </Form.Item>
                 <Form.Item label="负责人" name="principal" >
                     <div className='input-select-selector' >
@@ -111,14 +111,14 @@ const CollectionCreateForm = (values) => {
     );
 };
 
-class ModalForm extends Component {
+class DndModalForm extends Component {
     constructor(props) {
         super(props)
         this.state = {
             visible: props.visible,
             record: {},
             codeInputValue: props.record.code,
-            nameInputValue: props.record.name,
+            nameInputValue: props.record.code,
             ageInputValue: props.record.age,
             principalValue: [],
             childvisible: false,
@@ -127,6 +127,7 @@ class ModalForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log(nextProps)
         this.setState({
             visible: nextProps.visible,
             record: nextProps.record,
@@ -197,6 +198,7 @@ class ModalForm extends Component {
 
     render() {
         const { visible, childvisible, dataSelect } = this.state
+        console.log(this.state)
         return (
             <>
                 <CollectionCreateForm
@@ -212,7 +214,7 @@ class ModalForm extends Component {
                     handleClickOpenModal={this.handleClickOpenModal}
                     handleClose={this.handleClose}
                 />
-                <ModalContent
+                <DndModalContent
                     visible={childvisible}
                     dataSelect={dataSelect}
                     onUpdateForm={this.handleUpdateForm}
@@ -223,4 +225,4 @@ class ModalForm extends Component {
 
 };
 
-export default ModalForm
+export default DndModalForm
