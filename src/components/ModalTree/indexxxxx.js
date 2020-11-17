@@ -409,7 +409,6 @@ const ModalTree = (props) => {
     }
 
     const onSelect = (selectedKeys, info) => {
-        console.log('selected', selectedKeys, info);
         let flag = true
         for (let i = 0; i < dataTable.length; i++) {
             if (dataTable[i].treeId === selectedKeys[0]) {
@@ -473,7 +472,6 @@ const ModalTree = (props) => {
     //  右边Select表格的代码
 
     const handleDeleteSelect = (value) => {
-        console.log(value)
         setHasData(false)
 
     }

@@ -7,15 +7,15 @@ class ModalContent extends Component {
     super(props)
     this.state = {
       loading: false,
-      // visible: false,
       visible: props.visible,
-      formSelectName: ''
+      dataSelect: props.dataSelect
     };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       visible: nextProps.visible,
+      dataSelect: nextProps.dataSelect
     })
   }
 
@@ -23,7 +23,7 @@ class ModalContent extends Component {
     this.setState({ loading: true });
     setTimeout(() => {
       this.setState({ loading: false, visible: false });
-      this.props.onUpdateForm(this.state.formSelectName)
+      this.props.onUpdateForm(this.state.dataSelect)
     }, 1000);
   };
 
@@ -33,12 +33,12 @@ class ModalContent extends Component {
 
   handleSelectPeople = (dataSelect) => {
     this.setState({
-      formSelectName: dataSelect
+      dataSelect: dataSelect
     })
   }
 
   render() {
-    const { visible, loading } = this.state;
+    const { visible, loading, dataSelect } = this.state;
     return (
       <Modal
         width={1000}
@@ -55,7 +55,10 @@ class ModalContent extends Component {
             </Button>,
         ]}
       >
-        <ModalTree onSelectPeople={this.handleSelectPeople} />
+        <ModalTree
+          onSelectPeople={this.handleSelectPeople}
+          dataSelect={dataSelect}
+        />
       </Modal>
     );
   }

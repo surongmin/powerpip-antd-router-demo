@@ -81,7 +81,15 @@ const CollectionCreateForm = (values) => {
                                 (
                                     principalValue.map((tag, i) => {
                                         return (
-                                            <Tag closable onClose={() => handleClose(tag)} className="select-tag-item" key={i}>
+                                            <Tag
+                                                closable
+                                                onClose={e => {
+                                                    e.preventDefault();
+                                                    handleClose(tag);
+                                                }}
+                                                className="select-tag-item"
+                                                key={i}
+                                            >
                                                 {tag}
                                             </Tag>
                                         )
@@ -114,6 +122,7 @@ class ModalForm extends Component {
             ageInputValue: props.record.age,
             principalValue: [],
             childvisible: false,
+            dataSelect: []
         };
     }
 
@@ -128,7 +137,6 @@ class ModalForm extends Component {
     }
 
     onCreate = (values) => {
-        console.log('Received values of form: ', values);
         this.setState({ visible: false });
         this.props.onUpdateTable(values)
     };
@@ -159,7 +167,6 @@ class ModalForm extends Component {
     }
 
     handleUpdateForm = (value) => {
-        console.log(value)
         let principal = []
         for (let i = 0; i < value.length; i++) {
             principal.push(value[i].name)
@@ -168,18 +175,28 @@ class ModalForm extends Component {
         this.setState({
             childvisible: false,
             principalValue: principal,
-            searchRes: [principal]
+            dataSelect: value
         })
-        console.log(this.state.principalValue)
     }
 
     handleClose = removedTag => {
-        const tags = this.state.principalValue.filter(tag => tag !== removedTag);
-        this.setState({ principalValue: tags });
+        let flag = [...this.state.principalValue]
+        const tags = flag.filter(tag => tag !== removedTag);
+
+        let newValue = [...this.state.dataSelect]
+        for (let i = 0; i < newValue.length; i++) {
+            if (newValue[i].name === removedTag) {
+                newValue.splice(i, 1)
+            }
+        }
+        this.setState({
+            principalValue: tags,
+            dataSelect: newValue
+        });
     };
 
     render() {
-        const { visible, childvisible, principalValue } = this.state
+        const { visible, childvisible, dataSelect } = this.state
         return (
             <>
                 <CollectionCreateForm
@@ -197,8 +214,7 @@ class ModalForm extends Component {
                 />
                 <ModalContent
                     visible={childvisible}
-                    tag={principalValue}
-                    // record={record}
+                    dataSelect={dataSelect}
                     onUpdateForm={this.handleUpdateForm}
                 />
             </ >

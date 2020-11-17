@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Tree, Space, Table, Button } from 'antd';
 import { FolderOpenOutlined, FileOutlined, FormOutlined } from '@ant-design/icons';
 
@@ -391,7 +391,7 @@ const ModalTree = (props) => {
     const [dataTable, setDataTable] = useState(projectDataTable)
     const [data, setData] = useState([])
     const [hasData, setHasData] = useState(false)
-    const [dataSelect, setdataSelect] = useState([])
+    const [dataSelect, setdataSelect] = useState(props.dataSelect || [])
 
     const [projectButton, setProjectButton] = useState('primary')
     const [departmentButton, setDepartmentButton] = useState('default')
@@ -405,8 +405,13 @@ const ModalTree = (props) => {
         showLeafIcon: false
     }
 
+    useEffect(() => {
+        setdataSelect(props.dataSelect)
+    }, [props.dataSelect])
+
+
     const onSelect = (selectedKeys, info) => {
-        console.log('selected', selectedKeys, info);
+        // console.log('selected', selectedKeys, info);
         let flag = true
         for (let i = 0; i < dataTable.length; i++) {
             if (dataTable[i].treeId === selectedKeys[0]) {
@@ -488,7 +493,6 @@ const ModalTree = (props) => {
     //  右边Select表格的代码
 
     const handleDeleteSelect = (value) => {
-        console.log(value)
         let newValue = [...dataSelect]
         for (let i = 0; i < newValue.length; i++) {
             if (newValue[i].key === value.key) {
