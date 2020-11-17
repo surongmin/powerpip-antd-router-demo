@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { Modal, Form, Input, InputNumber, Tag } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import ModalContent from '../ModalContent'
@@ -22,6 +22,7 @@ const CollectionCreateForm = (values) => {
     const {
         visible,
         state,
+        props,
         onCreate,
         onCancel,
         handleCodeInputChange,
@@ -33,6 +34,12 @@ const CollectionCreateForm = (values) => {
     const { codeInputValue, nameInputValue, ageInputValue, principalValue } = state
 
     const [form] = Form.useForm();
+
+    useEffect(() => {
+        form.setFieldsValue({
+            ...props.record
+        });
+    }, [props.record])
     return (
         <Modal
             visible={visible}
@@ -44,7 +51,7 @@ const CollectionCreateForm = (values) => {
                 form
                     .validateFields()
                     .then((values) => {
-                        form.resetFields();
+                        // form.resetFields();
                         onCreate(values);
                     })
                     .catch((info) => {
@@ -206,6 +213,7 @@ class ModalForm extends Component {
                         this.setState({ visible: false });
                     }}
                     state={this.state}
+                    props={this.props}
                     handleCodeInputChange={this.handleCodeInputChange}
                     handleNameInputChange={this.handleNameInputChange}
                     handleAgeInputChange={this.handleAgeInputChange}

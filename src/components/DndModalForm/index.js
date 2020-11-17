@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Form, Input, InputNumber, Tag } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import DndModalContent from '../DndModalContent'
@@ -18,169 +18,167 @@ const formItemLayout = {
     },
 };
 
-const CollectionCreateForm = (values) => {
-    const {
-        visible,
-        state,
-        onCreate,
-        onCancel,
-        handleCodeInputChange,
-        handleNameInputChange,
-        handleAgeInputChange,
-        handleClickOpenModal,
-        handleClose
-    } = values
-    const { codeInputValue, nameInputValue, ageInputValue, principalValue } = state
-    console.log(codeInputValue, nameInputValue, ageInputValue,)
+// const CollectionCreateForm = (values) => {
+//     const {
+//         visible,
+//         state,
+//         onCreate,
+//         onCancel,
+//         handleCodeInputChange,
+//         handleNameInputChange,
+//         handleAgeInputChange,
+//         handleClickOpenModal,
+//         handleClose
+//     } = values
+//     const { codeInputValue, nameInputValue, ageInputValue, principalValue } = state
+//     console.log(codeInputValue, nameInputValue, ageInputValue,)
 
+//     const [form] = Form.useForm();
+//     return (
+//         <Modal
+//             visible={visible}
+//             title="人员信息"
+//             okText="确定"
+//             cancelText="取消"
+//             onCancel={onCancel}
+//             onOk={() => {
+//                 form
+//                     .validateFields()
+//                     .then((values) => {
+//                         form.resetFields();
+//                         onCreate(values);
+//                     })
+//                     .catch((info) => {
+//                         console.log('Validate Failed:', info);
+//                     });
+//             }}
+//         >
+//             <Form
+//                 // form={form}
+//                 name="form_in_modal"
+//                 {...formItemLayout}
+//                 initialValues={{
+//                     code: codeInputValue,
+//                     name: nameInputValue,
+//                     age: ageInputValue,
+//                     // principal: principalValue
+//                 }}
+//             >
+//                 <Form.Item label="编号" name="code">
+//                     <Input onChange={handleCodeInputChange} value={codeInputValue} />
+//                 </Form.Item>
+//                 <Form.Item label="姓名" name="name">
+//                     {nameInputValue}
+//                     <Input onChange={handleNameInputChange} value={nameInputValue} />
+//                 </Form.Item>
+//                 <Form.Item label="年龄" name="age">
+//                     <InputNumber min={0} max={150} onChange={handleAgeInputChange} value={ageInputValue} />
+//                 </Form.Item>
+//                 <Form.Item label="负责人" name="principal" >
+//                     <div className='input-select-selector' >
+//                         {
+//                             principalValue.length ?
+//                                 (
+//                                     principalValue.map((tag, i) => {
+//                                         return (
+//                                             <Tag
+//                                                 closable
+//                                                 onClose={e => {
+//                                                     e.preventDefault();
+//                                                     handleClose(tag);
+//                                                 }}
+//                                                 className="select-tag-item"
+//                                                 key={i}
+//                                             >
+//                                                 {tag}
+//                                             </Tag>
+//                                         )
+//                                     })
+//                                 )
+//                                 :
+//                                 <span className="ant-select-selection-placeholder">请选择人员</span>
+//                         }
+//                         <div className='icon-openmodal' onClick={handleClickOpenModal} >
+//                             <EllipsisOutlined />
+//                         </div>
+//                     </div>
+//                 </Form.Item>
+//             </Form>
+//         </Modal >
+//     );
+// };
+
+const DndModalForm = (props) => {
     const [form] = Form.useForm();
-    return (
-        <Modal
-            visible={visible}
-            title="人员信息"
-            okText="确定"
-            cancelText="取消"
-            onCancel={onCancel}
-            onOk={() => {
-                form
-                    .validateFields()
-                    .then((values) => {
-                        form.resetFields();
-                        onCreate(values);
-                    })
-                    .catch((info) => {
-                        console.log('Validate Failed:', info);
-                    });
-            }}
-        >
-            <Form
-                // form={form}
-                name="form_in_modal"
-                {...formItemLayout}
-                initialValues={{
-                    code: codeInputValue,
-                    name: nameInputValue,
-                    age: ageInputValue,
-                    // principal: principalValue
-                }}
-            >
-                <Form.Item label="编号" name="code">
-                    <Input onChange={handleCodeInputChange} value={codeInputValue} />
-                </Form.Item>
-                <Form.Item label="姓名" name="name">
-                    {nameInputValue}
-                    <Input onChange={handleNameInputChange} value={nameInputValue} />
-                </Form.Item>
-                <Form.Item label="年龄" name="age">
-                    <InputNumber min={0} max={150} onChange={handleAgeInputChange} value={ageInputValue} />
-                </Form.Item>
-                <Form.Item label="负责人" name="principal" >
-                    <div className='input-select-selector' >
-                        {
-                            principalValue.length ?
-                                (
-                                    principalValue.map((tag, i) => {
-                                        return (
-                                            <Tag
-                                                closable
-                                                onClose={e => {
-                                                    e.preventDefault();
-                                                    handleClose(tag);
-                                                }}
-                                                className="select-tag-item"
-                                                key={i}
-                                            >
-                                                {tag}
-                                            </Tag>
-                                        )
-                                    })
-                                )
-                                :
-                                <span className="ant-select-selection-placeholder">请选择人员</span>
-                        }
-                        <div className='icon-openmodal' onClick={handleClickOpenModal} >
-                            <EllipsisOutlined />
-                        </div>
-                    </div>
-                </Form.Item>
-                {/* <Form.Item label="负责人" name="principal" onClick={handleClickOpenModal} >
-                    <Input value={principalValue} placeholder={principalValue} suffix={<EllipsisOutlined />} />
-                </Form.Item> */}
-            </Form>
-        </Modal >
-    );
-};
+    const [visible, setVisible] = useState(props.visible);
+    const [codeInputValue, setCodeInputValue] = useState(props.record.code)
+    const [nameInputValue, setNameInputValue] = useState(props.record.name)
+    const [ageInputValue, setAgeInputValue] = useState(props.record.age)
+    const [principalValue, setPrincipalValue] = useState([])
+    const [childvisible, setChildvisible] = useState(false);
+    const [dataSelect, setDataSelect] = useState([]);
 
-class DndModalForm extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            visible: props.visible,
-            record: {},
-            codeInputValue: props.record.code,
-            nameInputValue: props.record.code,
-            ageInputValue: props.record.age,
-            principalValue: [],
-            childvisible: false,
-            dataSelect: []
-        };
-    }
+    // constructor(props) {
+    //     super(props)
+    //     this.state = {
+    //         visible: props.visible,
+    //         record: {},
+    //         codeInputValue: props.record.code,
+    //         nameInputValue: props.record.code,
+    //         ageInputValue: props.record.age,
+    //         principalValue: [],
+    //         childvisible: false,
+    //         dataSelect: []
+    //     };
+    // }
 
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps)
-        this.setState({
-            visible: nextProps.visible,
-            record: nextProps.record,
-            codeInputValue: nextProps.record.code,
-            nameInputValue: nextProps.record.name,
-            ageInputValue: nextProps.record.age
-        })
-    }
+    useEffect(() => {
+        setVisible(props.visible)
+    }, [props.visible])
 
-    onCreate = (values) => {
-        this.setState({ visible: false });
-        this.props.onUpdateTable(values)
+    useEffect(() => {
+        setCodeInputValue(props.record.code)
+        setNameInputValue(props.record.name)
+        setAgeInputValue(props.record.age);
+        form.setFieldsValue({
+            ...props.record
+        });
+    }, [props.record])
+
+    const onCreate = (values) => {
+        setVisible(false);
+        props.onUpdateTable(values)
     };
 
 
-    handleCodeInputChange = (e) => {
-        this.setState({
-            codeInputValue: e.target.value
-        })
+    const handleCodeInputChange = (e) => {
+        setCodeInputValue(e.target.value)
     }
 
-    handleNameInputChange = (e) => {
-        this.setState({
-            nameInputValue: e.target.value
-        })
+    const handleNameInputChange = (e) => {
+        setNameInputValue(e.target.value)
     }
 
-    handleAgeInputChange = (value) => {
-        this.setState({
-            ageInputValue: value,
-        })
+    const handleAgeInputChange = (e) => {
+        setAgeInputValue(e.target.value)
     }
 
-    handleClickOpenModal = () => {
-        this.setState({
-            childvisible: true
-        })
+
+    const handleClickOpenModal = () => {
+        setChildvisible(true)
     }
 
-    handleUpdateForm = (value) => {
+    const handleUpdateForm = (value) => {
         let principal = []
         for (let i = 0; i < value.length; i++) {
             principal.push(value[i].name)
         }
-
-        this.setState({
-            childvisible: false,
-            principalValue: principal,
-            dataSelect: value
-        })
+        setChildvisible(false)
+        setPrincipalValue(principal)
+        setDataSelect(value)
     }
 
-    handleClose = removedTag => {
+    const handleClose = removedTag => {
         let flag = [...this.state.principalValue]
         const tags = flag.filter(tag => tag !== removedTag);
 
@@ -190,39 +188,95 @@ class DndModalForm extends Component {
                 newValue.splice(i, 1)
             }
         }
-        this.setState({
-            principalValue: tags,
-            dataSelect: newValue
-        });
+
+        setPrincipalValue(tags)
+        setDataSelect(newValue)
     };
 
-    render() {
-        const { visible, childvisible, dataSelect } = this.state
-        console.log(this.state)
-        return (
-            <>
-                <CollectionCreateForm
-                    visible={visible}
-                    onCreate={this.onCreate}
-                    onCancel={() => {
-                        this.setState({ visible: false });
-                    }}
-                    state={this.state}
-                    handleCodeInputChange={this.handleCodeInputChange}
-                    handleNameInputChange={this.handleNameInputChange}
-                    handleAgeInputChange={this.handleAgeInputChange}
-                    handleClickOpenModal={this.handleClickOpenModal}
-                    handleClose={this.handleClose}
-                />
-                <DndModalContent
-                    visible={childvisible}
-                    dataSelect={dataSelect}
-                    onUpdateForm={this.handleUpdateForm}
-                />
-            </ >
-        );
-    }
 
+    return (
+        <>
+            <Modal
+                visible={visible}
+                title="人员信息1"
+                okText="确定"
+                cancelText="取消"
+                onCreate={onCreate}
+                onCancel={() => {
+                    setVisible(false);
+                    props.onUpdateTable();
+                    form.resetFields();
+                }}
+                onOk={() => {
+                    form
+                        .validateFields()
+                        .then((values) => {
+                            form.resetFields();
+                            onCreate(values);
+                        })
+                        .catch((info) => {
+                            console.log('Validate Failed:', info);
+                        });
+                }}
+            >
+                <Form
+                    form={form}
+                    name="form_in_modal"
+                    {...formItemLayout}
+                    initialValues={{
+                        code: codeInputValue,
+                        name: nameInputValue,
+                        age: ageInputValue,
+                        // principal: principalValue
+                    }}
+                >
+                    <Form.Item label="编号" name="code">
+                        <Input onChange={handleCodeInputChange} />
+                    </Form.Item>
+                    <Form.Item label="姓名" name="name">
+                        <Input onChange={handleNameInputChange} />
+                    </Form.Item>
+                    <Form.Item label="年龄" name="age">
+                        <InputNumber min={0} max={150} onChange={handleAgeInputChange} />
+                    </Form.Item>
+                    <Form.Item label="负责人" name="principal" >
+                        <div className='input-select-selector' >
+                            {
+                                principalValue.length ?
+                                    (
+                                        principalValue.map((tag, i) => {
+                                            return (
+                                                <Tag
+                                                    closable
+                                                    onClose={e => {
+                                                        e.preventDefault();
+                                                        handleClose(tag);
+                                                    }}
+                                                    className="select-tag-item"
+                                                    key={i}
+                                                >
+                                                    {tag}
+                                                </Tag>
+                                            )
+                                        })
+                                    )
+                                    :
+                                    <span className="ant-select-selection-placeholder">请选择人员</span>
+                            }
+                            <div className='icon-openmodal' onClick={handleClickOpenModal} >
+                                <EllipsisOutlined />
+                            </div>
+                        </div>
+                    </Form.Item>
+                </Form>
+            </Modal >
+            <DndModalContent
+                visible={childvisible}
+                dataSelect={dataSelect}
+                onUpdateForm={handleUpdateForm}
+            />
+        </ >
+    );
 };
 
 export default DndModalForm

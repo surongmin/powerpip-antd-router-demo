@@ -174,20 +174,17 @@ const Feedback = () => {
         // object的setState赋值方式
         setVisible(true)
         setRecorddata({ ...record })
-        console.log(record)
-        console.log(recorddata)
     }
 
     const handleUpdateTable = (values) => {
-        const { code, name, age } = values
-        let newData = data.map(item => {
-            return recorddata.key === item.key ? { ...item, code, name, age } : item
-        });
+        if (values) {
+            const { code, name, age } = values
+            let newData = data.map(item => {
+                return recorddata.key === item.key ? { ...item, code, name, age } : item
+            });
+            setData(newData)
+        }
         setVisible(false)
-        setData(newData)
-
-        console.log(values)
-        console.log(newData)
     }
 
     return (
