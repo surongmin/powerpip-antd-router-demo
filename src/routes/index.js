@@ -3,7 +3,7 @@ import {
     DndTable,
     TreeTable,
     Plan,
-    ProjectApproval,
+    Admin,
     Schedule,
     Summary,
     Task
@@ -28,9 +28,9 @@ export const projectRoutes = [
         title: "树形数据表格"
     },
     {
-        path: '/project/projectApproval',
-        component: ProjectApproval,
-        title: "项目立项申请"
+        path: '/project/admin',
+        component: Admin,
+        title: "后台配置管理"
     },
     {
         path: '/project/summary',

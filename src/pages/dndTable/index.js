@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Table } from 'antd';
 import { DndProvider, useDrag, useDrop, createDndContext } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -145,6 +145,32 @@ const DndTable = () => {
 
     const [visible, setVisible] = useState(false)
     const [recorddata, setRecorddata] = useState({})
+    const [dndborder, setdndborder] = useState(false);
+    const [dndtitle, setDndtitle] = useState(false);
+    const [dndheader, setDndheader] = useState(false);
+    const [dndrowselection, setDndrowselection] = useState(false);
+    const [dndsize, setDndsize] = useState('default');
+
+    useEffect(() => {
+        let flagDndvalue = {}
+        for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            let flag = localStorage.getItem(key)
+            if (flag === 'true') {
+                flag = true
+            }
+            if (flag === 'false') {
+                flag = false
+            }
+            flagDndvalue[key] = flag
+        }
+        console.log(flagDndvalue)
+        setdndborder(flagDndvalue.dndborder)
+        setDndtitle(flagDndvalue.dndtitle)
+        setDndheader(flagDndvalue.dndheader)
+        setDndrowselection(flagDndvalue.dndrowselection)
+        setDndsize(flagDndvalue.dndsize)
+    }, [localStorage])
 
     const components = {
         body: {
@@ -190,6 +216,8 @@ const DndTable = () => {
     return (
         <DndProvider manager={manager.current.dragDropManager}>
             <Table
+                bordered={dndborder}
+                size={dndsize}
                 columns={columns}
                 dataSource={data}
                 components={components}
@@ -200,13 +228,14 @@ const DndTable = () => {
                 })
                 }
             />
+
             <DndModalForm
                 visible={visible}
                 record={recorddata}
                 onUpdateTable={handleUpdateTable}
             />
         </DndProvider>
-    );
+    )
 };
 
 export default DndTable

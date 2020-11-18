@@ -8,7 +8,7 @@ export { default as TreeTable } from './treeTable';
 // 项目策划
 export { default as Plan } from './plan';
 // 项目立项申请
-export { default as ProjectApproval } from './projectApproval';
+export { default as Admin } from './admin';
 // 进度管理
 export { default as Schedule } from './schedule';
 // 投资项目汇总
