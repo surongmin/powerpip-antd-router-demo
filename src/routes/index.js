@@ -1,7 +1,7 @@
 import {
-    Decompose,
-    Feedback,
-    Investment,
+    BasicTables,
+    DndTable,
+    TreeTable,
     Plan,
     ProjectApproval,
     Schedule,
@@ -12,20 +12,20 @@ import {
 
 export const projectRoutes = [
     {
-        path: '/project/decompose',
-        component: Decompose,
-        title: "投资计划分解"
+        path: '/project/basicTables',
+        component: BasicTables,
+        title: "基础表格"
     },
 
     {
-        path: '/project/feedback',
-        component: Feedback,
-        title: "投资计划反馈"
+        path: '/project/dndTable',
+        component: DndTable,
+        title: "可拖拽表格"
     },
     {
-        path: '/project/investment',
-        component: Investment,
-        title: "年度投资计划"
+        path: '/project/treeTable',
+        component: TreeTable,
+        title: "树形数据表格"
     },
     {
         path: '/project/projectApproval',

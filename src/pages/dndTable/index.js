@@ -88,7 +88,7 @@ const columns = [
     }
 ];
 
-const Feedback = () => {
+const DndTable = () => {
     const [data, setData] = useState([
         {
             key: 1,
@@ -209,4 +209,4 @@ const Feedback = () => {
     );
 };
 
-export default Feedback
+export default DndTable

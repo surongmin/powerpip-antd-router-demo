@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Tree, Space, Table, Button } from 'antd';
+import { Row, Col, Tree, Space, Table, Button, Radio, Divider } from 'antd';
 import { FolderOpenOutlined, FileOutlined, FormOutlined } from '@ant-design/icons';
 
 // tree的数据
@@ -396,8 +396,7 @@ const DndModalTree = (props) => {
     const [projectButton, setProjectButton] = useState('primary')
     const [departmentButton, setDepartmentButton] = useState('default')
 
-    const [radioButton, setRadioButton] = useState('primary')
-    const [multipleButton, setMultipleButton] = useState('default')
+    const [selectionType, setSelectionType] = useState('checkbox');
 
     // tree的代码
     const showLine = {
@@ -440,37 +439,21 @@ const DndModalTree = (props) => {
 
     // 中间表格的代码
 
-    const handleClickRow = (record) => {
-        let newData = []
-        if (radioButton === 'primary') {
-            newData = [{ ...record }]
-        }
-        else {
-            // 对象数组去重
-            let result = [...dataSelect, record]
-            var obj = {};
-            for (var i = 0; i < result.length; i++) {
-                if (!obj[result[i].key]) {
-                    newData.push(result[i]);
-                    obj[result[i].key] = true;
-                }
-            }
-        }
+    const rowSelection = {
+        onChange: (selectedRowKeys, selectedRows) => {
+            // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
 
-        setHasData(true)
-        setdataSelect(newData)
-        props.onSelectPeople(newData)
-    }
-
-    const handleRadioClick = () => {
-        setRadioButton('primary');
-        setMultipleButton('default')
-    }
-
-    const handleMultipleClick = () => {
-        setRadioButton('default');
-        setMultipleButton('primary')
-    }
+            setHasData(true)
+            setdataSelect(selectedRows)
+            props.onSelectPeople(selectedRows)
+        },
+        // 不可点击
+        // getCheckboxProps: (record) => ({
+        //     disabled: record.name === 'Disabled User',
+        //     // Column configuration not to be checked
+        //     name: record.name,
+        // }),
+    };
 
     // 右边Select表格的字段
     const columnsSelect = [
@@ -520,21 +503,28 @@ const DndModalTree = (props) => {
                 />
             </Col>
             <Col className="gutter-row" span={10}>
-                <div>
-                    <Button type={radioButton} onClick={handleRadioClick} style={{ margin: '10px' }}>单选</Button>
-                    <Button type={multipleButton} onClick={handleMultipleClick} >多选</Button>
-                </div>
+                <Radio.Group
+                    onChange={({ target: { value } }) => {
+                        setSelectionType(value);
+                    }}
+                    value={selectionType}
+                >
+                    <Radio value="checkbox">多选</Radio>
+                    <Radio value="radio">单选</Radio>
+                </Radio.Group>
+
+                <Divider />
                 <Table
                     bordered
-                    columns={columns}
-                    dataSource={data ? data : null}
-                    pagination={data.length > 5 ? true : false}
-                    onRow={record => {
-                        return {
-                            onClick: event => { handleClickRow(record) }, // 点击行
-                        };
+                    rowSelection={{
+                        type: selectionType,
+                        ...rowSelection,
                     }}
+                    columns={columns}
+                    dataSource={data}
+                    pagination={data.length > 5 ? true : false}
                 />
+
             </Col>
             <Col className="gutter-row" span={6} >
                 <Table

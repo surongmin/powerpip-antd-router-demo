@@ -18,96 +18,6 @@ const formItemLayout = {
     },
 };
 
-// const CollectionCreateForm = (values) => {
-//     const {
-//         visible,
-//         state,
-//         onCreate,
-//         onCancel,
-//         handleCodeInputChange,
-//         handleNameInputChange,
-//         handleAgeInputChange,
-//         handleClickOpenModal,
-//         handleClose
-//     } = values
-//     const { codeInputValue, nameInputValue, ageInputValue, principalValue } = state
-//     console.log(codeInputValue, nameInputValue, ageInputValue,)
-
-//     const [form] = Form.useForm();
-//     return (
-//         <Modal
-//             visible={visible}
-//             title="人员信息"
-//             okText="确定"
-//             cancelText="取消"
-//             onCancel={onCancel}
-//             onOk={() => {
-//                 form
-//                     .validateFields()
-//                     .then((values) => {
-//                         form.resetFields();
-//                         onCreate(values);
-//                     })
-//                     .catch((info) => {
-//                         console.log('Validate Failed:', info);
-//                     });
-//             }}
-//         >
-//             <Form
-//                 // form={form}
-//                 name="form_in_modal"
-//                 {...formItemLayout}
-//                 initialValues={{
-//                     code: codeInputValue,
-//                     name: nameInputValue,
-//                     age: ageInputValue,
-//                     // principal: principalValue
-//                 }}
-//             >
-//                 <Form.Item label="编号" name="code">
-//                     <Input onChange={handleCodeInputChange} value={codeInputValue} />
-//                 </Form.Item>
-//                 <Form.Item label="姓名" name="name">
-//                     {nameInputValue}
-//                     <Input onChange={handleNameInputChange} value={nameInputValue} />
-//                 </Form.Item>
-//                 <Form.Item label="年龄" name="age">
-//                     <InputNumber min={0} max={150} onChange={handleAgeInputChange} value={ageInputValue} />
-//                 </Form.Item>
-//                 <Form.Item label="负责人" name="principal" >
-//                     <div className='input-select-selector' >
-//                         {
-//                             principalValue.length ?
-//                                 (
-//                                     principalValue.map((tag, i) => {
-//                                         return (
-//                                             <Tag
-//                                                 closable
-//                                                 onClose={e => {
-//                                                     e.preventDefault();
-//                                                     handleClose(tag);
-//                                                 }}
-//                                                 className="select-tag-item"
-//                                                 key={i}
-//                                             >
-//                                                 {tag}
-//                                             </Tag>
-//                                         )
-//                                     })
-//                                 )
-//                                 :
-//                                 <span className="ant-select-selection-placeholder">请选择人员</span>
-//                         }
-//                         <div className='icon-openmodal' onClick={handleClickOpenModal} >
-//                             <EllipsisOutlined />
-//                         </div>
-//                     </div>
-//                 </Form.Item>
-//             </Form>
-//         </Modal >
-//     );
-// };
-
 const DndModalForm = (props) => {
     const [form] = Form.useForm();
     const [visible, setVisible] = useState(props.visible);
@@ -117,20 +27,6 @@ const DndModalForm = (props) => {
     const [principalValue, setPrincipalValue] = useState([])
     const [childvisible, setChildvisible] = useState(false);
     const [dataSelect, setDataSelect] = useState([]);
-
-    // constructor(props) {
-    //     super(props)
-    //     this.state = {
-    //         visible: props.visible,
-    //         record: {},
-    //         codeInputValue: props.record.code,
-    //         nameInputValue: props.record.code,
-    //         ageInputValue: props.record.age,
-    //         principalValue: [],
-    //         childvisible: false,
-    //         dataSelect: []
-    //     };
-    // }
 
     useEffect(() => {
         setVisible(props.visible)
@@ -179,10 +75,10 @@ const DndModalForm = (props) => {
     }
 
     const handleClose = removedTag => {
-        let flag = [...this.state.principalValue]
+        let flag = [...principalValue]
         const tags = flag.filter(tag => tag !== removedTag);
 
-        let newValue = [...this.state.dataSelect]
+        let newValue = [...dataSelect]
         for (let i = 0; i < newValue.length; i++) {
             if (newValue[i].name === removedTag) {
                 newValue.splice(i, 1)

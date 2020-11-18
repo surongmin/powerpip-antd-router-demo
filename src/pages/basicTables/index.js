@@ -3,7 +3,7 @@ import {
     TableDemo
 } from '../../components'
 
-export const Decompose = () => {
+export const BasicTables = () => {
     return (
         <>
             <TableDemo />
@@ -11,4 +11,4 @@ export const Decompose = () => {
     )
 }
 
-export default Decompose
+export default BasicTables
