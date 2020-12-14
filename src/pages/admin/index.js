@@ -118,7 +118,7 @@ const Admin = () => {
                 </div>
             </Col>
             <Col className="gutter-row" span={8}>
-                <div style={borderstyle}>
+                {/* <div style={borderstyle}>
                     <h2>树形数据表格</h2>
                     <Divider />
                     <Form>
@@ -129,10 +129,10 @@ const Admin = () => {
                             <Switch checked={border} onChange={setBorder} />
                         </Form.Item>
                     </Form>
-                </div>
+                </div> */}
             </Col>
             <Col className="gutter-row" span={8} gutter={24}>
-                <div style={borderstyle}>
+                {/* <div style={borderstyle}>
                     <h2>基础表格</h2>
                     <Divider />
                     <Form>
@@ -143,7 +143,7 @@ const Admin = () => {
                             <Switch checked={border} onChange={setBorder} />
                         </Form.Item>
                     </Form>
-                </div>
+                </div> */}
             </Col>
         </Row>
     )

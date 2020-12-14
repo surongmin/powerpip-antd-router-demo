@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "get",
+                async: false,
+                url: "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxe222c6a9574ef695&secret=40f39f86e018635029421e29add87340",
+                dataType: "jsonp",
+                contentType: "application/json",
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function () {
+                    console.log('fail');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

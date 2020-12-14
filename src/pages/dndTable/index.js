@@ -88,6 +88,8 @@ const columns = [
     }
 ];
 
+const title = () => '这里是表格标题';
+
 const DndTable = () => {
     const [data, setData] = useState([
         {
@@ -218,6 +220,10 @@ const DndTable = () => {
             <Table
                 bordered={dndborder}
                 size={dndsize}
+                rowSelection={dndrowselection}
+                showHeader={dndheader}
+                title={dndtitle ? title : undefined}
+
                 columns={columns}
                 dataSource={data}
                 components={components}

@@ -244,6 +244,7 @@ class TableDemo extends Component {
         const columns = [
             {
                 title: '',
+                dataIndex: '',
                 render: (text, record, index) => `${index + 1}`,
             },
             {
