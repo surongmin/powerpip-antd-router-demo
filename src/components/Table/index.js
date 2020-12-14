@@ -219,15 +219,20 @@ class TableDemo extends Component {
     };
 
     handleUpdateTable = (values) => {
-        const { code, name, age } = values
-        const { dataTable, record } = this.state;
-        let newData = dataTable.map(item => {
-            return record.key === item.key ? { ...item, code, name, age } : item
-        });
+        if (values) {
+            const { code, name, age } = values
+            const { dataTable, record } = this.state;
+            let newData = dataTable.map(item => {
+                return record.key === item.key ? { ...item, code, name, age } : item
+            });
+            this.setState({
+                dataTable: newData,
+            })
+        }
         this.setState({
-            dataTable: newData,
             visible: false
         })
+        console.log(this.state.visible)
     }
 
     render() {
